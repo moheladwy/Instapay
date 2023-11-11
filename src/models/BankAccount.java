@@ -7,9 +7,10 @@ public class BankAccount extends Account {
     private BankProvider provider;
 
     public BankAccount(String cardNumber, CardType type, BankProvider provider,
-                       double balance, double maxAllowedBalance) throws Exception {
+            double balance, double maxAllowedBalance) throws Exception {
         super(balance, maxAllowedBalance);
         setCardNumber(cardNumber);
+        setProvider(provider);
         setType(type);
     }
 
