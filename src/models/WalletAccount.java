@@ -2,14 +2,12 @@ package models;
 import enums.*;
 
 public class WalletAccount extends Account {
-    private String walletNumber;
     private WalletType type;
     private WalletProvider provider;
 
     public WalletAccount(String walletNumber, WalletType type, WalletProvider provider,
                          double balance, double maxAllowedBalance) throws Exception {
-        super(balance, maxAllowedBalance);
-        setWalletNumber(walletNumber);
+        super(walletNumber, balance, maxAllowedBalance);
         setProvider(provider);
         setType(type);
     }
@@ -22,16 +20,6 @@ public class WalletAccount extends Account {
 
     public WalletProvider getProvider() {
         return provider;
-    }
-
-    private void setWalletNumber(String walletNumber) throws Exception {
-        if (walletNumber == null)
-            throw new Exception("Wallet Number cannot be null!");
-        this.walletNumber = walletNumber;
-    }
-
-    public String getWalletNumber() {
-        return walletNumber;
     }
 
     private void setType(WalletType type) throws Exception {
