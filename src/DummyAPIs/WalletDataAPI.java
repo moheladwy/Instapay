@@ -1,20 +1,47 @@
 package DummyAPIs;
+import enums.*;
 import models.*;
-
-import java.util.HashMap;
+import java.util.*;
 
 public class WalletDataAPI {
-    private HashMap<String, String> WalletData;
+    // key = PhoneNumber.
+    private final HashMap<String, WalletAccount> walletData;
 
-    public WalletDataAPI() {
-        setWalletData();
+    public WalletDataAPI() throws Exception {
+        this.walletData = new HashMap<>();
+        makeDummyData();
     }
 
-    public void addWallet() { }
+    public void addWallet(WalletAccount account) throws Exception {
+        if (account == null)
+            throw new Exception("Account cannot be null!");
+        walletData.put(account.getPhoneNumber(), account);
+    }
 
-    public boolean isWalletExist() { return false; }
+    public boolean isPhoneNumberHasWallet(String phoneNumber) throws Exception {
+        if (phoneNumber == null)
+            throw new Exception("Phone Number cannot be null!");
+        return walletData.get(phoneNumber) != null;
+    }
 
-    private void setWalletData() {
-        this.WalletData = new HashMap<>();
+    public WalletAccount getWallet(String phoneNumber) throws Exception {
+        if (phoneNumber == null)
+            throw new Exception("Phone Number cannot be null!");
+        return walletData.get(phoneNumber);
+    }
+
+    public void makeDummyData() throws Exception {
+        // the phone number should be 11 digits starts with 010, 011, 012, or 015
+        List<WalletAccount> accounts = new ArrayList<>();
+        accounts.add(new WalletAccount("01111111111", WalletType.Bank,
+                WalletProvider.CIB, 1100, 25_000));
+        accounts.add(new WalletAccount("01000000001", WalletType.Telecom,
+                WalletProvider.Vodafone, 2000, 25_000));
+        accounts.add(new WalletAccount("01222222222", WalletType.Telecom,
+                WalletProvider.Orange, 3000, 25_000));
+        accounts.add(new WalletAccount("01000000000", WalletType.Bank,
+                WalletProvider.QNB, 20_000, 25_000));
+        for (WalletAccount account : accounts)
+            walletData.put(account.getPhoneNumber(), account);
     }
 }
