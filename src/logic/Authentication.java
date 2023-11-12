@@ -2,13 +2,9 @@ package logic;
 import enums.*;
 import models.*;
 
-public class Authentication {
-    public static AuthenticationStatus login(User user) {
-        return AuthenticationStatus.LOGIN_FAILED;
-    }
-    public static AuthenticationStatus register(User user) {
-        return AuthenticationStatus.REGISTRATION_FAILED;
-    }
+public abstract class Authentication {
+    public abstract AuthenticationStatus login(User user);
+    public abstract AuthenticationStatus register(User user);
     public static AuthenticationStatus sendOTP(User user) {
         return AuthenticationStatus.REGISTRATION_FAILED;
     }

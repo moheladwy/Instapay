@@ -2,24 +2,12 @@ package models;
 import enums.*;
 
 public class Bill {
-    private BillType type;
     private double amount;
     private String paymentNumber;
 
-    public Bill(BillType type, double amount, String paymentNumber) throws Exception {
-        setType(type);
+    public Bill(double amount, String paymentNumber) throws Exception {
         setAmount(amount);
         setPaymentNumber(paymentNumber);
-    }
-
-    public BillType getType() {
-        return type;
-    }
-
-    public void setType(BillType type) throws Exception {
-        if (type == null)
-            throw new Exception("Bill Type cannot be null!");
-        this.type = type;
     }
 
     public double getAmount() {
