@@ -11,6 +11,7 @@ public class WaterBill extends Bill {
         subscriberName = Name;
         areaCode = paymentNumber.substring(0,3);
         subscriberNumber = paymentNumber.substring(3,9);
+
     }
 
     public String getAreaCode() {
