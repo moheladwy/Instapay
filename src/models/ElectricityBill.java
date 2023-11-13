@@ -8,21 +8,6 @@ public class ElectricityBill extends Bill {
 
     public ElectricityBill(double amount, String paymentNumber, String Name) throws Exception {
         super(amount, paymentNumber);
-        subscriberName = Name;
-        areaCode = paymentNumber.substring(0,3);
-        subscriberNumber = paymentNumber.substring(3,12);
-    }
-
-    public String getAreaCode() {
-        return areaCode;
-    }
-
-    public String getSubscriberNumber() {
-        return subscriberNumber;
-    }
-
-    public String getSubscriberName() {
-        return subscriberName;
     }
 
     public void setSubscriberName(String subscriberName) throws Exception {
