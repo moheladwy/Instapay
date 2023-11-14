@@ -1,15 +1,21 @@
 package DummyAPIs;
+
 import enums.*;
 import models.*;
+
 import java.util.*;
 
 public class WalletDataAPI {
     // key = PhoneNumber.
     private final HashMap<String, WalletAccount> walletData;
 
-    public WalletDataAPI() throws Exception {
+    public WalletDataAPI() {
         this.walletData = new HashMap<>();
-        makeDummyData();
+        try {
+            makeDummyData();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void addWallet(WalletAccount account) throws Exception {
@@ -18,15 +24,15 @@ public class WalletDataAPI {
         walletData.put(account.getPhoneNumber(), account);
     }
 
-    public boolean isPhoneNumberHasWallet(String phoneNumber) throws Exception {
+    public boolean isPhoneNumberHasWallet(String phoneNumber) throws NullPointerException {
         if (phoneNumber == null)
-            throw new Exception("Phone Number cannot be null!");
+            throw new NullPointerException("Phone Number cannot be null!");
         return walletData.get(phoneNumber) != null;
     }
 
-    public WalletAccount getWallet(String phoneNumber) throws Exception {
+    public WalletAccount getWallet(String phoneNumber) throws NullPointerException {
         if (phoneNumber == null)
-            throw new Exception("Phone Number cannot be null!");
+            throw new NullPointerException("Phone Number cannot be null!");
         return walletData.get(phoneNumber);
     }
 

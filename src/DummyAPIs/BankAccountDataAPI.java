@@ -23,19 +23,18 @@ public class BankAccountDataAPI {
         bankAccountsData.put(account.getCardNumber(), account);
     }
 
-    public boolean isPhoneNumberConnected(String AccountNumber, String PhoneNumber) throws Exception {
-        if (AccountNumber == null || PhoneNumber == null)
-            throw new Exception("Account Number and Phone Number cannot be null!");
-        return bankAccountsData.get(AccountNumber).getPhoneNumber().equalsIgnoreCase(PhoneNumber);
+    public boolean isPhoneNumberConnected(String accountNumber, String phoneNumber) throws NullPointerException {
+        if (accountNumber == null || phoneNumber == null)
+            throw new NullPointerException("Account Number and Phone Number cannot be null!");
+        return bankAccountsData.containsKey(accountNumber) &&
+                bankAccountsData.get(accountNumber).getPhoneNumber().equalsIgnoreCase(phoneNumber);
     }
 
 
 
-    public BankAccount getAccount(String accountNumber) throws Exception {
+    public BankAccount getAccount(String accountNumber) throws NullPointerException {
         if (accountNumber == null)
-            throw new Exception("Account Number cannot be null!");
-        if (!bankAccountsData.containsKey(accountNumber))
-            throw new Exception("Account Number is not found!");
+            throw new NullPointerException("Account Number cannot be null!");
         return bankAccountsData.get(accountNumber);
     }
 
