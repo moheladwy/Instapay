@@ -7,15 +7,69 @@ import models.*;
 import java.util.Scanner;
 
 public abstract class Authentication {
-    public abstract AuthenticationStatus register();
+    public AuthenticationStatus register(){
+        // Step 1: Register personal info
+        User user = registerPersonalInfo();
+        if(user == null)
+            return AuthenticationStatus.REGISTRATION_FAILED;
 
-    public abstract AuthenticationStatus login();
+        // Step 2: Register account info (Override this method in subclasses)
+        Account account = registerAccountInfo(user);
+        if (account == null)
+            return AuthenticationStatus.REGISTRATION_FAILED;
 
-    public static AuthenticationStatus sendOTP(User user) {
-        return AuthenticationStatus.REGISTRATION_FAILED;
+        // Step 3: Add account to Database
+        user.setAccount(account);
+        InstapayAccountDataAPI.addAccount(user);
+        return AuthenticationStatus.REGISTRATION_SUCCESS;
+    }
+    public AuthenticationStatus login() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter username:");
+        String username = scanner.nextLine();
+
+        System.out.println("Enter password:");
+        String password = scanner.nextLine();
+
+        User user = new InstapayAccountDataAPI().getAccount(username, password);
+
+        if (user == null) {
+            System.out.println("Invalid username or password!");
+            return AuthenticationStatus.LOGIN_FAILED;
+        }
+        return AuthenticationStatus.LOGIN_SUCCESS;
     }
 
-    protected User takeUserInfoInput() throws NullPointerException {
+    protected abstract Account registerAccountInfo(User user);
+
+    public boolean sendOTP(User user) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter the OTP sent to this phone number: " + user.getPhoneNumber());
+        String OTP = scanner.nextLine();
+        while (OTP == null || OTP.isEmpty() || !OTP.matches("[0-9]{6}")) {
+            System.out.println("Invalid OTP format!");
+            OTP = scanner.nextLine();
+        }
+        System.out.println("OTP is correct!");
+        return true;
+    }
+
+    protected User registerPersonalInfo(){
+        System.out.println("Enter your personal information:");
+        User user = takeUserInfoInput();
+        if (new InstapayAccountDataAPI().isUsernameExists(user.getUsername())) {
+            System.out.println("Username already exists!");
+            return null;
+        }
+
+        if (!sendOTP(user))
+            return null;
+
+        return user;
+    }
+
+    private User takeUserInfoInput() throws NullPointerException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter your full name:");
         String name = scanner.nextLine();

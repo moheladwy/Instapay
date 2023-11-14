@@ -1,22 +1,22 @@
 package logic;
+
+import DummyAPIs.InstapayAccountDataAPI;
+import DummyAPIs.WalletDataAPI;
 import enums.*;
 import models.*;
 
+import java.util.Scanner;
+
 public class WalletAccountAuthentication extends Authentication {
-    public AuthenticationStatus register(User user) {
-        return AuthenticationStatus.REGISTRATION_FAILED;
-    }
-    public AuthenticationStatus login(User user) {
-        return AuthenticationStatus.LOGIN_FAILED;
-    }
-
     @Override
-    public AuthenticationStatus register() {
-        return null;
-    }
-
-    @Override
-    public AuthenticationStatus login() {
-        return null;
+    protected Account registerAccountInfo(User user) {
+        System.out.println("Checking wallet...");
+        WalletDataAPI walletDataAPI = new WalletDataAPI();
+        if (!walletDataAPI.isPhoneNumberHasWallet(user.getPhoneNumber())) {
+            System.out.println("This phone number is not connected to any wallet!");
+            return null;
+        }
+        System.out.println("Wallet found!");
+        return walletDataAPI.getWallet(user.getPhoneNumber());
     }
 }
