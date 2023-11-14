@@ -10,13 +10,12 @@ import java.util.Scanner;
 public class WalletAccountAuthentication extends Authentication {
     @Override
     protected Account registerAccountInfo(User user) {
-        System.out.println("Checking wallet...");
-        WalletDataAPI walletDataAPI = new WalletDataAPI();
-        if (!walletDataAPI.isPhoneNumberHasWallet(user.getPhoneNumber())) {
-            System.out.println("This phone number is not connected to any wallet!");
+        System.out.println("Checking wallet ...");
+        if (!WalletDataAPI.isPhoneNumberHasWallet(user.getPhoneNumber())) {
+            System.out.println("This phone number doesn't have a wallet!");
             return null;
         }
         System.out.println("Wallet found!");
-        return walletDataAPI.getWallet(user.getPhoneNumber());
+        return WalletDataAPI.getWallet(user.getPhoneNumber());
     }
 }

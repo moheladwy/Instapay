@@ -8,6 +8,7 @@ public class GasBill extends Bill {
     private String buildingNumber;
     private String apartmentNumber;
     private String subscriberName;
+
     public GasBill(double amount, String paymentNumber, String Name) throws Exception {
         super(amount, paymentNumber);
     }
@@ -48,4 +49,27 @@ public class GasBill extends Bill {
         this.subscriberName = subscriberName;
     }
 
+    public String getGovernmentCode() {
+        return governmentCode;
+    }
+
+    public String getAreaCode() {
+        return areaCode;
+    }
+
+    public String getSectorNumber() {
+        return sectorNumber;
+    }
+
+    public String getBuildingNumber() {
+        return buildingNumber;
+    }
+
+    public String getApartmentNumber() {
+        return apartmentNumber;
+    }
+
+    public String getSubscriberName() {
+        return subscriberName;
+    }
 }

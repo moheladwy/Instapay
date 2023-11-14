@@ -24,13 +24,13 @@ public class InstapayAccountDataAPI {
         accounts.put(user.getUsername(), user);
     }
 
-    public boolean isUsernameExists(String username)  {
+    public static boolean isUsernameExists(String username)  {
         if (username == null)
             return false;
         return accounts.containsKey(username);
     }
 
-    public User getAccount(String username, String password) {
+    public static User getAccount(String username, String password) {
         if (username == null || password == null)
             return null;
         User user = accounts.get(username);
@@ -39,7 +39,7 @@ public class InstapayAccountDataAPI {
         return user;
     }
 
-    private void makeDummyData() throws Exception {
+    private static void makeDummyData() throws Exception {
         accounts.put("user1", new User("user1", "user1", "user1", "01000000000",
                 new WalletAccount("01000000000", WalletType.Bank, WalletProvider.CIB, 1000, 1000_000)));
         accounts.put("user2", new User("user2", "user2", "user2", "01111111111",

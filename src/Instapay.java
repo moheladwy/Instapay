@@ -32,8 +32,8 @@ public class Instapay {
     private AuthenticationStatus executeOperation(int operation) {
         AuthenticationStatus status = null;
         switch (operation) {
-            case 1 -> status = authentication.login(user);
-            case 2 -> status = authentication.register(user);
+            case 1 -> status = authentication.login();
+            case 2 -> status = authentication.register();
             case 3 -> {
                 System.out.println("Thanks for using Instapay!");
                 System.exit(0);

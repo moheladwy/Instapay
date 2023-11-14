@@ -7,10 +7,10 @@ import java.util.*;
 
 public class WalletDataAPI {
     // key = PhoneNumber.
-    private final HashMap<String, WalletAccount> walletData;
+    private static HashMap<String, WalletAccount> walletData;
 
     public WalletDataAPI() {
-        this.walletData = new HashMap<>();
+        walletData = new HashMap<>();
         try {
             makeDummyData();
         } catch (Exception e) {
@@ -18,25 +18,25 @@ public class WalletDataAPI {
         }
     }
 
-    public void addWallet(WalletAccount account) throws Exception {
+    public static void addWallet(WalletAccount account) throws Exception {
         if (account == null)
             throw new Exception("Account cannot be null!");
         walletData.put(account.getPhoneNumber(), account);
     }
 
-    public boolean isPhoneNumberHasWallet(String phoneNumber) throws NullPointerException {
+    public static boolean isPhoneNumberHasWallet(String phoneNumber) throws NullPointerException {
         if (phoneNumber == null)
             throw new NullPointerException("Phone Number cannot be null!");
         return walletData.get(phoneNumber) != null;
     }
 
-    public WalletAccount getWallet(String phoneNumber) throws NullPointerException {
+    public static WalletAccount getWallet(String phoneNumber) throws NullPointerException {
         if (phoneNumber == null)
             throw new NullPointerException("Phone Number cannot be null!");
         return walletData.get(phoneNumber);
     }
 
-    public void makeDummyData() throws Exception {
+    public static void makeDummyData() throws Exception {
         // the phone number should be 11 digits starts with 010, 011, 012, or 015
         List<WalletAccount> accounts = new ArrayList<>();
         accounts.add(new WalletAccount("01111111111", WalletType.Bank,

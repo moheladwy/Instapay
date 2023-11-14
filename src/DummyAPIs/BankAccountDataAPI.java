@@ -5,7 +5,7 @@ import java.util.*;
 
 public class BankAccountDataAPI {
     // key = AccountNumber.
-    private final HashMap<String, BankAccount> bankAccountsData;
+    private static HashMap<String, BankAccount> bankAccountsData;
 
     public BankAccountDataAPI() {
         bankAccountsData = new HashMap<>();
@@ -17,28 +17,26 @@ public class BankAccountDataAPI {
         }
     }
 
-    public void AddAccount(BankAccount account) throws Exception {
+    public static void AddAccount(BankAccount account) throws Exception {
         if (account == null)
             throw new Exception("Account cannot be null!");
         bankAccountsData.put(account.getCardNumber(), account);
     }
 
-    public boolean isPhoneNumberConnected(String accountNumber, String phoneNumber) throws NullPointerException {
+    public static boolean isPhoneNumberConnected(String accountNumber, String phoneNumber) throws NullPointerException {
         if (accountNumber == null || phoneNumber == null)
             throw new NullPointerException("Account Number and Phone Number cannot be null!");
         return bankAccountsData.containsKey(accountNumber) &&
                 bankAccountsData.get(accountNumber).getPhoneNumber().equalsIgnoreCase(phoneNumber);
     }
 
-
-
-    public BankAccount getAccount(String accountNumber) throws NullPointerException {
+    public static BankAccount getAccount(String accountNumber) throws NullPointerException {
         if (accountNumber == null)
             throw new NullPointerException("Account Number cannot be null!");
         return bankAccountsData.get(accountNumber);
     }
 
-    private void makeDummyData() throws Exception {
+    private static void makeDummyData() throws Exception {
         // the account number should be 16 digits starts with 5338 or 4738
         // the phone number should be 11 digits starts with 010, 011, 012, or 015
         // the balance should be between 0 and maxAllowedBalance

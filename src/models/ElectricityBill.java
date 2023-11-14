@@ -27,4 +27,16 @@ public class ElectricityBill extends Bill {
             throw new Exception("Subscriber Number cannot be null!");
         this.subscriberNumber = subscriberNumber;
     }
+
+    public String getAreaCode() {
+        return areaCode;
+    }
+
+    public String getSubscriberNumber() {
+        return subscriberNumber;
+    }
+
+    public String getSubscriberName() {
+        return subscriberName;
+    }
 }
