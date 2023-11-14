@@ -9,22 +9,28 @@ public class User {
         this.account = null;
     }
 
-    public User(String name, String username, String password, String phoneNumber, Account account)
-    throws Exception {
+    public User(String name, String username, String password, String phoneNumber)
+            throws NullPointerException {
         setName(name);
-        setAccount(account);
         setUsername(username);
         setPassword(password);
         setPhoneNumber(phoneNumber);
+        this.account = null;
+    }
+
+    public User(String name, String username, String password, String phoneNumber, Account account)
+            throws Exception {
+        this(name, username, password, phoneNumber);
+        setAccount(account);
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) throws Exception {
+    public void setName(String name) throws NullPointerException {
         if (name == null)
-            throw new Exception("Name cannot be null!");
+            throw new NullPointerException("Name cannot be null!");
         this.name = name;
     }
 
@@ -32,9 +38,9 @@ public class User {
         return username;
     }
 
-    public void setUsername(String username) throws Exception {
+    public void setUsername(String username) throws NullPointerException {
         if (username == null)
-            throw new Exception("Username cannot be null!");
+            throw new NullPointerException("Username cannot be null!");
         this.username = username;
     }
 
@@ -42,9 +48,9 @@ public class User {
         return password;
     }
 
-    public void setPassword(String password) throws Exception {
+    public void setPassword(String password) throws NullPointerException {
         if (password == null)
-            throw new Exception("Password cannot be null!");
+            throw new NullPointerException("Password cannot be null!");
         this.password = password;
     }
 
@@ -52,9 +58,9 @@ public class User {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) throws Exception {
+    public void setPhoneNumber(String phoneNumber) throws NullPointerException {
         if (phoneNumber == null)
-            throw new Exception("Phone Number cannot be null!");
+            throw new NullPointerException("Phone Number cannot be null!");
         this.phoneNumber = phoneNumber;
     }
 
@@ -62,9 +68,9 @@ public class User {
         return account;
     }
 
-    public void setAccount(Account account) throws Exception {
+    public void setAccount(Account account) throws NullPointerException {
         if (account == null)
-            throw new Exception("Account cannot be null");
+            throw new NullPointerException("Account cannot be null");
         this.account = account;
     }
 }
