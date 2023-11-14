@@ -37,7 +37,6 @@ public class Instapay {
             case 3 -> {
                 System.out.println("Thanks for using Instapay!");
                 System.exit(0);
-                break;
             }
         }
         return status;
