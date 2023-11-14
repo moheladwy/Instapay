@@ -18,9 +18,9 @@ public class WalletAccount extends Account {
         setType(type);
     }
 
-    public void setProvider(WalletProvider provider) throws Exception {
+    private void setProvider(WalletProvider provider) throws NullPointerException {
         if (provider == null)
-            throw new Exception("Provider cannot be null!");
+            throw new NullPointerException("Provider cannot be null!");
         this.provider = provider;
     }
 
@@ -28,9 +28,9 @@ public class WalletAccount extends Account {
         return provider;
     }
 
-    public void setType(WalletType type) throws Exception {
+    private void setType(WalletType type) throws NullPointerException {
         if (type == null)
-            throw new Exception("Wallet Type cannot be null!");
+            throw new NullPointerException("Wallet Type cannot be null!");
         this.type = type;
     }
 

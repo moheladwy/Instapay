@@ -7,9 +7,14 @@ public class BankAccountDataAPI {
     // key = AccountNumber.
     private final HashMap<String, BankAccount> bankAccountsData;
 
-    public BankAccountDataAPI() throws Exception {
+    public BankAccountDataAPI() {
         bankAccountsData = new HashMap<>();
-        makeDummyData();
+        try {
+            makeDummyData();
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void AddAccount(BankAccount account) throws Exception {
@@ -24,9 +29,13 @@ public class BankAccountDataAPI {
         return bankAccountsData.get(AccountNumber).getPhoneNumber().equalsIgnoreCase(PhoneNumber);
     }
 
+
+
     public BankAccount getAccount(String accountNumber) throws Exception {
         if (accountNumber == null)
             throw new Exception("Account Number cannot be null!");
+        if (!bankAccountsData.containsKey(accountNumber))
+            throw new Exception("Account Number is not found!");
         return bankAccountsData.get(accountNumber);
     }
 
