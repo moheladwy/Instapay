@@ -30,13 +30,22 @@ public class InstapayAccountDataAPI {
         return accounts.containsKey(username);
     }
 
-    public static User getAccount(String username, String password) {
+    public static User getUser(String username, String password) {
         if (username == null || password == null)
             return null;
         User user = accounts.get(username);
         if (user == null || !user.getUsername().equals(username))
             return null;
         return user;
+    }
+
+    public static Account getAccount(String username) {
+        if (username == null)
+            return null;
+        User user = accounts.get(username);
+        if (user == null || !user.getUsername().equals(username))
+            return null;
+        return user.getAccount();
     }
 
     private static void makeDummyData() throws Exception {
