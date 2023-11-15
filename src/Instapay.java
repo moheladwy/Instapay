@@ -46,7 +46,7 @@ public class Instapay {
                     int option = UI.chooseBillType();
                     executePayingBills(option);
                 }
-                case 3: executeEditPersonalInfo(); // // TODO: Write the implementation.
+                case 3: checkBalance();
                 case 4: {
                     System.out.println("Thanks for using Instapay!");
                     System.exit(0);
@@ -57,18 +57,9 @@ public class Instapay {
 
     private void executeMoneyTransaction(int option) {
         switch (option) {
-            case 1: {
-                executeInstapayTransaction();
-                break;
-            }
-            case 2: {
-                executeBankAccountTransaction();
-                break;
-            }
-            case 3: {
-                executeWalletTransaction();
-                break;
-            }
+            case 1: executeInstapayTransaction();
+            case 2: executeBankAccountTransaction();
+            case 3: executeWalletTransaction();
             case 4: break;
         }
     }
@@ -187,8 +178,8 @@ public class Instapay {
         }
     }
 
-    private void executeEditPersonalInfo() {
-        // TODO: Write the implementation.
+    private void checkBalance() {
+        System.out.println("Your balance is: " + user.getAccount().getBalance());
     }
 
     private void executeAuthenticationMethod(int operation) {

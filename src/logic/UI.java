@@ -27,7 +27,7 @@ public class UI {
         System.out.println("=======================================================");
         System.out.println("1- Send Money");
         System.out.println("2- Pay Bills");
-        System.out.println("3- Edit Personal Info");
+        System.out.println("3- Inquire Balance");
         System.out.println("4- Exit");
     }
 
