@@ -21,7 +21,7 @@ public class Payment {
 
             return TransactionStatus.TRANSACTION_SUCCESS;
         } catch (Exception e) {
-            e.printStackTrace();
+            e.getMessage();
             return TransactionStatus.TRANSACTION_FAILED;
         }
     }

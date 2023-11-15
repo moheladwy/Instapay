@@ -33,7 +33,7 @@ public abstract class Authentication {
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
 
-        User user = InstapayAccountDataAPI.getAccount(username, password);
+        User user = InstapayAccountDataAPI.getUser(username, password);
 
         if (user == null) {
             System.out.println("Invalid username or password!");

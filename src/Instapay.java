@@ -1,3 +1,6 @@
+import DummyAPIs.BankAccountDataAPI;
+import DummyAPIs.InstapayAccountDataAPI;
+import DummyAPIs.WalletDataAPI;
 import enums.AuthenticationStatus;
 import logic.*;
 import models.*;
@@ -23,23 +26,150 @@ public class Instapay {
     }
 
     public void start() throws Exception {
-        int type = chooseAccountType();
-        setAttributes(type);
-        int operation = chooseOperation();
-        AuthenticationStatus status = executeOperation(operation);
+        int accountType = UI.chooseAccountType();
+        setAttributes(accountType);
+
+        int authenticationType = UI.chooseAuthenticationType();
+        executeAuthenticationMethod(authenticationType);
+
+        while (true) {
+            int operation = UI.chooseOperation();
+            switch (operation) {
+                case 1: {
+                    int option = UI.chooseTransactionType();
+                    executeMoneyTransaction(option);
+                }
+                case 2: {
+                    int option = UI.chooseBillType();
+                    executePayingBills(option);
+                }
+                case 3: executeEditPersonalInfo(); // // TODO: Write the implementation.
+                case 4: {
+                    System.out.println("Thanks for using Instapay!");
+                    System.exit(0);
+                }
+            }
+        }
     }
 
-    private AuthenticationStatus executeOperation(int operation) {
+    private void executeMoneyTransaction(int option) {
+        switch (option) {
+            case 1: {
+                executeInstapayTransaction();
+                break;
+            }
+            case 2: {
+                executeBankAccountTransaction();
+                break;
+            }
+            case 3: {
+                executeWalletTransaction();
+                break;
+            }
+            case 4: break;
+        }
+    }
+
+    private void executeInstapayTransaction() {
+        String receiverUsername = UI.getReceiverUsername();
+        if (!InstapayAccountDataAPI.isUsernameExists(receiverUsername))  {
+            System.out.println("Username doesn't exist!");
+            return;
+        }
+        Account receiver = InstapayAccountDataAPI.getAccount(receiverUsername);
+        double amount = UI.getAmount();
+        try {
+            Payment.sendToInstapayAccount(user.getAccount(), receiver, amount);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    private void executeBankAccountTransaction() {
+        String receiverBankAccountNumber = UI.getReceiverBankAccountNumber();
+        if (!BankAccountDataAPI.isBankAccountExist(receiverBankAccountNumber)) {
+            System.out.println("Bank account number doesn't exist!");
+            return;
+        }
+        BankAccount receiverBankAccount = BankAccountDataAPI.getAccount(receiverBankAccountNumber);
+        double amount = UI.getAmount();
+        try {
+            Payment.sendToBankAccount((BankAccount) user.getAccount(), receiverBankAccount, amount);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    private void executeWalletTransaction() {
+        String receiverPhoneNumber = UI.getReceiverPhoneNumber();
+        if (!WalletDataAPI.isPhoneNumberHasWallet(receiverPhoneNumber)) {
+            System.out.println("Phone number doesn't exist!");
+            return;
+        }
+        WalletAccount receiverAccount = WalletDataAPI.getWallet(receiverPhoneNumber);
+        double amount = UI.getAmount();
+        try {
+            Payment.sendToWallet(user.getAccount(), receiverAccount, amount);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    private void executePayingBills(int option) {
+        switch (option) {
+            case 1: executeElectricityBillPayment();
+            case 2: executeWaterBillPayment();
+            case 3: executeGasBillPayment();
+            case 4: break;
+        }
+    }
+
+    private void executeGasBillPayment() {
+        // TODO: Write the implementation.
+    }
+
+    private void executeWaterBillPayment() {
+        // TODO: Write the implementation.
+    }
+
+    private void executeElectricityBillPayment() {
+        // TODO: Write the implementation.
+    }
+
+    private void executeEditPersonalInfo() {
+        // TODO: Write the implementation.
+    }
+
+    private void executeAuthenticationMethod(int operation) {
         AuthenticationStatus status = null;
         switch (operation) {
-            case 1 -> status = authentication.login();
-            case 2 -> status = authentication.register();
+            case 1 -> {
+                status = authentication.login();
+                if (status == AuthenticationStatus.LOGIN_FAILED) {
+                    System.out.println("Invalid username or password, Try again later!");
+                    System.exit(0);
+                }
+                else if (status == AuthenticationStatus.NOT_HAVE_ACCOUNT) {
+                    System.out.println("You don't have an account, Please register first!");
+                    System.exit(0);
+                }
+            }
+            case 2 -> {
+                status = authentication.register();
+                if (status == AuthenticationStatus.REGISTRATION_FAILED) {
+                    System.out.println("Registration failed, Try again later!");
+                    System.exit(0);
+                }
+                else if (status == AuthenticationStatus.ALREADY_HAVE_ACCOUNT) {
+                    System.out.println("You already have an account, Please login!");
+                    System.exit(0);
+                }
+            }
             case 3 -> {
                 System.out.println("Thanks for using Instapay!");
                 System.exit(0);
             }
         }
-        return status;
     }
 
     private void setAttributes(int type) {
@@ -51,45 +181,5 @@ public class Instapay {
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-    }
-
-    private int chooseAccountType() {
-        System.out.println("Welcome to Instapay!");
-        System.out.println("Please choose account type from the following types=>");
-        System.out.println("=====================================================");
-        System.out.println("1- Bank Account");
-        System.out.println("2- Wallet Account");
-        System.out.print("Choose account type: ");
-        int type = 0;
-        while (type == 0) {
-            String accountType = System.console().readLine();
-            if (accountType.equals("1"))
-                type = 1;
-            else if (accountType.equals("2"))
-                type = 2;
-            else
-                System.out.println("Invalid choice, Please Enter 1 or 2 only!");
-        }
-        return type;
-    }
-
-    private int chooseOperation() {
-        System.out.println("Please choose operation from the following operations=>");
-        System.out.println("=======================================================");
-        System.out.println("1- Login");
-        System.out.println("2- Register");
-        System.out.println("3- Exit");
-        int operation = 0;
-        while (operation == 0) {
-            System.out.print("Choose operation: ");
-            String operationType = System.console().readLine();
-            switch (operationType) {
-                case "1" -> operation = 1;
-                case "2" -> operation = 2;
-                case "3" -> operation = 3;
-                default -> System.out.println("Invalid choice, Please Enter 1, 2 or 3 only!");
-            }
-        }
-        return operation;
     }
 }

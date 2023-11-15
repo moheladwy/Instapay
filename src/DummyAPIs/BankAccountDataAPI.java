@@ -30,6 +30,12 @@ public class BankAccountDataAPI {
                 bankAccountsData.get(accountNumber).getPhoneNumber().equalsIgnoreCase(phoneNumber);
     }
 
+    public static boolean isBankAccountExist(String accountNumber) throws NullPointerException {
+        if (accountNumber == null)
+            throw new NullPointerException("Account Number cannot be null!");
+        return bankAccountsData.containsKey(accountNumber);
+    }
+
     public static BankAccount getAccount(String accountNumber) throws NullPointerException {
         if (accountNumber == null)
             throw new NullPointerException("Account Number cannot be null!");
