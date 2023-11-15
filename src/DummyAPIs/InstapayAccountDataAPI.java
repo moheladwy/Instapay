@@ -9,7 +9,7 @@ public class InstapayAccountDataAPI {
     // key: username
     private static HashMap<String, User> accounts;
 
-    public InstapayAccountDataAPI() {
+    private InstapayAccountDataAPI() {
         accounts = new HashMap<>();
         try {
             makeDummyData();

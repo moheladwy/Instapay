@@ -2,7 +2,9 @@ package logic;
 import enums.*;
 import models.Account;
 import models.BankAccount;
+import models.GasBill;
 import models.WalletAccount;
+import models.Bill;
 
 public class Payment {
     public static TransactionStatus sendToInstapayAccount(Account sender, Account receiver, double amount) {
@@ -65,6 +67,27 @@ public class Payment {
         } catch (Exception e) {
             e.printStackTrace();
             return TransactionStatus.TRANSACTION_FAILED;
+        }
+    }
+
+
+    public static void payBill(Account account, Bill bill, double amount) {
+        try {
+            if (account == null || bill == null) {
+                throw new Exception("Account or bill cannot be null!");
+            }
+
+            if (account.getBalance() < amount) {
+                throw new Exception("Insufficient balance!");
+            }
+
+            account.setBalance(account.getBalance() - amount);
+
+            bill.setAmount(bill.getAmount() - amount);
+
+            System.out.println("Bill paid successfully!");
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
         }
     }
 }

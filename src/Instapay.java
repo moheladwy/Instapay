@@ -1,9 +1,12 @@
 import DummyAPIs.BankAccountDataAPI;
+import DummyAPIs.BillsDataAPI;
 import DummyAPIs.InstapayAccountDataAPI;
 import DummyAPIs.WalletDataAPI;
 import enums.AuthenticationStatus;
 import logic.*;
 import models.*;
+
+import java.util.Scanner;
 
 public class Instapay {
     private Authentication authentication;
@@ -125,15 +128,63 @@ public class Instapay {
     }
 
     private void executeGasBillPayment() {
-        // TODO: Write the implementation.
+        System.out.print("Enter payment number: ");
+        Scanner scanner = new Scanner(System.in);
+        String paymentNumber = scanner.nextLine();
+
+        GasBill bill = BillsDataAPI.getGasBill(paymentNumber);
+        if (bill == null) {
+            System.out.println("Payment number doesn't exist!");
+            return;
+        }
+        double amount = bill.getAmount();
+
+        try {
+            Payment.payBill(user.getAccount(), bill, amount);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+
+
+
     }
 
     private void executeWaterBillPayment() {
-        // TODO: Write the implementation.
+        System.out.print("Enter payment number: ");
+        Scanner scanner = new Scanner(System.in);
+        String paymentNumber = scanner.nextLine();
+
+        WaterBill bill = BillsDataAPI.getWaterBill(paymentNumber);
+        if (bill == null) {
+            System.out.println("Payment number doesn't exist!");
+            return;
+        }
+        double amount = bill.getAmount();
+
+        try {
+            Payment.payBill(user.getAccount(), bill, amount);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     private void executeElectricityBillPayment() {
-        // TODO: Write the implementation.
+        System.out.print("Enter payment number: ");
+        Scanner scanner = new Scanner(System.in);
+        String paymentNumber = scanner.nextLine();
+
+        ElectricityBill bill = BillsDataAPI.getElectricityBill(paymentNumber);
+        if (bill == null) {
+            System.out.println("Payment number doesn't exist!");
+            return;
+        }
+        double amount = bill.getAmount();
+
+        try {
+            Payment.payBill(user.getAccount(), bill, amount);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     private void executeEditPersonalInfo() {

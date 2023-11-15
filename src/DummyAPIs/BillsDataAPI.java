@@ -20,19 +20,19 @@ public class BillsDataAPI {
         makeDummyData();
     }
 
-    public WaterBill getWaterBill(String paymentCode) throws NullPointerException {
+    public static WaterBill getWaterBill(String paymentCode) throws NullPointerException {
         if (paymentCode == null)
             throw new NullPointerException("Payment code cannot be null!");
         return waterBillsData.get(paymentCode);
     }
 
-    public GasBill getGasBill(String paymentCode) throws NullPointerException {
+    public static GasBill getGasBill(String paymentCode) throws NullPointerException {
         if (paymentCode == null)
             throw new NullPointerException("Payment code cannot be null!");
         return gasBillsData.get(paymentCode);
     }
 
-    public ElectricityBill getElectricityBill(String paymentCode) throws NullPointerException {
+    public static ElectricityBill getElectricityBill(String paymentCode) throws NullPointerException {
         if (paymentCode == null)
             throw new NullPointerException("Payment code cannot be null!");
         return electricityBillsData.get(paymentCode);
