@@ -40,20 +40,20 @@ public class BillsDataAPI {
 
     private static void makeDummyData() throws Exception {
         //water bill consists of 9 digits: first 3 digits is the area code and last 6 is subscriber number
-        waterBillsData.put("190", new WaterBill(190, "487121898","Mohamed"));
-        waterBillsData.put("200", new WaterBill(200, "487121565", "Ahmed"));
-        waterBillsData.put("210", new WaterBill(210, "348121898", "Mahmoud"));
+        waterBillsData.put("487121898", new WaterBill(190, "487121898","Mohamed"));
+        waterBillsData.put("487121565", new WaterBill(200, "487121565", "Ahmed"));
+        waterBillsData.put("348121898", new WaterBill(210, "348121898", "Mahmoud"));
 
         //electricity bill consists of 12 digits: first 3 digits is the area code and last 9 is subscriber number
-        electricityBillsData.put("400", new ElectricityBill(400, "01476893651276", "omar"));
-        electricityBillsData.put("410", new ElectricityBill(410, "01476893656844", "qasem"));
-        electricityBillsData.put("600", new ElectricityBill(600, "01476899856734", "mohamed"));
+        electricityBillsData.put("01476893651276", new ElectricityBill(400, "01476893651276", "omar"));
+        electricityBillsData.put("01476893656844", new ElectricityBill(410, "01476893656844", "qasem"));
+        electricityBillsData.put("01476899856734", new ElectricityBill(600, "01476899856734", "mohamed"));
 
         /*gas bill consists of 16 digits: first 2 are the government code then 2 digits area code then 2 digits
         area code then 2 digits sector number then 4 digits building number and last 4 are apartment number.
          */
-        gasBillsData.put("50", new GasBill(50, "0130363850050008", "Ahmed"));
-        gasBillsData.put("60", new GasBill(60, "0130353850070014", "Mohamed"));
-        gasBillsData.put("70", new GasBill(70, "0130343190050009", "Ali"));
+        gasBillsData.put("0130363850050008", new GasBill(50, "0130363850050008", "Ahmed"));
+        gasBillsData.put("0130353850070014", new GasBill(60, "0130353850070014", "Mohamed"));
+        gasBillsData.put("0130343190050009", new GasBill(70, "0130343190050009", "Ali"));
     }
 }

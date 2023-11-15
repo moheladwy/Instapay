@@ -62,7 +62,7 @@ public class UI {
         UI.optionsMenu();
         int operation = 0;
         Scanner scanner = new Scanner(System.in);
-        while (operation == 0) {
+        while (operation < 1 || operation > 4) {
             System.out.print("Choose operation: ");
             String operationType = scanner.nextLine();
             switch (operationType) {
@@ -80,7 +80,7 @@ public class UI {
         UI.accountTypeMenu();
         int type = 0;
         Scanner scanner = new Scanner(System.in);
-        while (type == 0) {
+        while (type != 1 && type != 2) {
             System.out.print("Choose account type: ");
             String accountType = scanner.nextLine();
             switch (accountType) {
@@ -96,7 +96,7 @@ public class UI {
         UI.authenticationMenu();
         int operation = 0;
         Scanner scanner = new Scanner(System.in);
-        while (operation == 0) {
+        while (operation < 1 || operation > 3) {
             System.out.print("Choose operation: ");
             String operationType = scanner.nextLine();
             switch (operationType) {
@@ -113,7 +113,7 @@ public class UI {
         UI.sendMoneyMenu();
         int operation = 0;
         Scanner scanner = new Scanner(System.in);
-        while (operation != 4) {
+        while (operation < 1 || operation > 4) {
             System.out.print("Choose operation: ");
             String operationType = scanner.nextLine();
             switch (operationType) {
@@ -131,7 +131,7 @@ public class UI {
         payBillsMenu();
         int operation = 0;
         Scanner scanner = new Scanner(System.in);
-        while (operation != 4) {
+        while (operation < 1 || operation > 4) {
             System.out.print("Choose operation: ");
             String operationType = scanner.nextLine();
             switch (operationType) {
@@ -164,7 +164,7 @@ public class UI {
         while (notValid) {
             System.out.print("Enter receiver's bank account number: ");
             receiverBankAccountNumber = scanner.nextLine();
-            notValid = receiverBankAccountNumber == null || !receiverBankAccountNumber.matches("^(5338|4738)[0-9]{14}$");
+            notValid = receiverBankAccountNumber == null || !receiverBankAccountNumber.matches("^(5338|4738)[0-9]{12}$");
             if (notValid)
                 System.out.println("Invalid bank account number, Please try again!");
         }

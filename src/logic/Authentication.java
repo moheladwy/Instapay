@@ -8,24 +8,24 @@ import java.util.Scanner;
 
 public abstract class Authentication {
 
-    public AuthenticationStatus register(){
+    public RegistrationStatus register(User user){
         // Step 1: Register personal info
-        User user = registerPersonalInfo();
-        if(user == null)
-            return AuthenticationStatus.REGISTRATION_FAILED;
+        RegistrationStatus status = registerPersonalInfo(user);
+        if(status != RegistrationStatus.REGISTRATION_SUCCESS)
+            return status;
 
         // Step 2: Register account info (Override this method in subclasses)
         Account account = registerAccountInfo(user);
         if (account == null)
-            return AuthenticationStatus.REGISTRATION_FAILED;
+            return RegistrationStatus.REGISTRATION_FAILED;
 
         // Step 3: Add account to Database
         user.setAccount(account);
         new InstapayAccountDataAPI().addAccount(user);
-        return AuthenticationStatus.REGISTRATION_SUCCESS;
+        return RegistrationStatus.REGISTRATION_SUCCESS;
     }
 
-    public AuthenticationStatus login() {
+    public User login() {
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("Enter username: ");
@@ -34,13 +34,7 @@ public abstract class Authentication {
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
 
-        User user = new InstapayAccountDataAPI().getUser(username, password);
-
-        if (user == null) {
-            System.out.println("Invalid username or password!");
-            return AuthenticationStatus.LOGIN_FAILED;
-        }
-        return AuthenticationStatus.LOGIN_SUCCESS;
+        return new InstapayAccountDataAPI().getUser(username, password);
     }
 
     protected abstract Account registerAccountInfo(User user);
@@ -57,14 +51,16 @@ public abstract class Authentication {
         return true;
     }
 
-    protected User registerPersonalInfo(){
+    protected RegistrationStatus registerPersonalInfo(User user){
         System.out.println("Enter your personal information=>");
-        User user = takeUserInfoInput();
+        user.copy(takeUserInfoInput());
+
         if (new InstapayAccountDataAPI().isUsernameExists(user.getUsername())) {
-            System.out.println("Username already exists!");
-            return null;
+            return RegistrationStatus.ALREADY_HAVE_ACCOUNT;
         }
-        return sendOTP(user) ? user : null;
+
+        user = sendOTP(user) ? user : null;
+        return user != null ? RegistrationStatus.REGISTRATION_SUCCESS : RegistrationStatus.REGISTRATION_FAILED;
     }
 
     private User takeUserInfoInput() throws NullPointerException {

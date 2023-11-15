@@ -24,6 +24,14 @@ public class User {
         setAccount(account);
     }
 
+    public void copy (User user) {
+        this.name = user.name;
+        this.username = user.username;
+        this.password = user.password;
+        this.phoneNumber = user.phoneNumber;
+        this.account = user.account;
+    }
+
     public String getName() {
         return name;
     }

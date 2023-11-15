@@ -11,6 +11,7 @@ public class BankAccount extends Account {
         this.cardNumber = null;
         this.type = null;
         this.provider = null;
+        this.accountType = AccountType.Bank;
     }
 
     public BankAccount(String cardNumber, CardType type, BankProvider provider,
@@ -19,6 +20,7 @@ public class BankAccount extends Account {
         setCardNumber(cardNumber);
         setProvider(provider);
         setType(type);
+        this.accountType = AccountType.Bank;
     }
 
     public String getCardNumber() {

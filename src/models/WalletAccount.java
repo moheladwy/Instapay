@@ -9,6 +9,7 @@ public class WalletAccount extends Account {
         super();
         this.type = null;
         this.provider = null;
+        this.accountType = AccountType.Wallet;
     }
 
     public WalletAccount(String walletNumber, WalletType type, WalletProvider provider,
@@ -16,6 +17,7 @@ public class WalletAccount extends Account {
         super(walletNumber, balance, maxAllowedBalance);
         setProvider(provider);
         setType(type);
+        this.accountType = AccountType.Wallet;
     }
 
     private void setProvider(WalletProvider provider) throws NullPointerException {
