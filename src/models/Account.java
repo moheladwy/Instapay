@@ -1,7 +1,11 @@
 package models;
+
+import enums.AccountType;
+
 public abstract class Account {
     private double balance, maxAllowedBalance;
     private String phoneNumber;
+    protected AccountType accountType;
 
     public Account() {
         balance = 0;
@@ -10,14 +14,14 @@ public abstract class Account {
     }
 
     public Account(String phoneNumber, double balance, double maxAllowedBalance) throws Exception {
-        setBalance(balance);
         setMaxAllowedBalance(maxAllowedBalance);
+        setBalance(balance);
         setPhoneNumber(phoneNumber);
     }
 
     private void setMaxAllowedBalance(double maxAllowedBalance) throws Exception {
-        if (maxAllowedBalance < 100_000)
-            throw new Exception("Max Allowed Balance cannot be less than 100,000 !");
+        if (maxAllowedBalance < 25_000)
+            throw new Exception("Max Allowed Balance cannot be less than 25,000!");
         this.maxAllowedBalance = maxAllowedBalance;
     }
 
@@ -48,5 +52,9 @@ public abstract class Account {
                 !phoneNumber.startsWith("012") && !phoneNumber.startsWith("015"))
             throw new Exception("Phone Number must start with 010, 011, 012, or 015!");
         this.phoneNumber = phoneNumber;
+    }
+
+    public AccountType getAccountType() {
+        return accountType;
     }
 }

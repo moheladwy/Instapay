@@ -18,19 +18,19 @@ public class WalletDataAPI {
         }
     }
 
-    public static void addWallet(WalletAccount account) throws Exception {
+    public void addWallet(WalletAccount account) throws Exception {
         if (account == null)
             throw new Exception("Account cannot be null!");
         walletData.put(account.getPhoneNumber(), account);
     }
 
-    public static boolean isPhoneNumberHasWallet(String phoneNumber) throws NullPointerException {
+    public boolean isPhoneNumberHasWallet(String phoneNumber) throws NullPointerException {
         if (phoneNumber == null)
             throw new NullPointerException("Phone Number cannot be null!");
         return walletData.get(phoneNumber) != null;
     }
 
-    public static WalletAccount getWallet(String phoneNumber) throws NullPointerException {
+    public WalletAccount getWallet(String phoneNumber) throws NullPointerException {
         if (phoneNumber == null)
             throw new NullPointerException("Phone Number cannot be null!");
         return walletData.get(phoneNumber);

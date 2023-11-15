@@ -14,12 +14,12 @@ public class BankAccountAuthentication extends Authentication {
         System.out.print("Please enter your bank account card number: ");
         String cardNumber = scanner.nextLine();
 
-        BankAccount bankAccount = BankAccountDataAPI.getAccount(cardNumber);
+        BankAccount bankAccount = new BankAccountDataAPI().getAccount(cardNumber);
         System.out.println("Checking bank account ...");
         if (bankAccount == null) {
             System.out.println("Invalid card number!");
             return null;
-        } else if (!BankAccountDataAPI.isPhoneNumberConnected(cardNumber, user.getPhoneNumber())) {
+        } else if (!new BankAccountDataAPI().isPhoneNumberConnected(cardNumber, user.getPhoneNumber())) {
             System.out.println("This card number is not connected to this phone number!");
             return null;
         }

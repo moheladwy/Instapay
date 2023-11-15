@@ -17,32 +17,26 @@ public class BankAccountDataAPI {
         }
     }
 
-    public static void AddAccount(BankAccount account) throws Exception {
-        if (account == null)
-            throw new Exception("Account cannot be null!");
-        bankAccountsData.put(account.getCardNumber(), account);
-    }
-
-    public static boolean isPhoneNumberConnected(String accountNumber, String phoneNumber) throws NullPointerException {
+    public  boolean isPhoneNumberConnected(String accountNumber, String phoneNumber) throws NullPointerException {
         if (accountNumber == null || phoneNumber == null)
             throw new NullPointerException("Account Number and Phone Number cannot be null!");
         return bankAccountsData.containsKey(accountNumber) &&
                 bankAccountsData.get(accountNumber).getPhoneNumber().equalsIgnoreCase(phoneNumber);
     }
 
-    public static boolean isBankAccountExist(String accountNumber) throws NullPointerException {
+    public  boolean isBankAccountExist(String accountNumber) throws NullPointerException {
         if (accountNumber == null)
             throw new NullPointerException("Account Number cannot be null!");
         return bankAccountsData.containsKey(accountNumber);
     }
 
-    public static BankAccount getAccount(String accountNumber) throws NullPointerException {
+    public  BankAccount getAccount(String accountNumber) throws NullPointerException {
         if (accountNumber == null)
             throw new NullPointerException("Account Number cannot be null!");
         return bankAccountsData.get(accountNumber);
     }
 
-    private static void makeDummyData() throws Exception {
+    private  void makeDummyData() throws Exception {
         // the account number should be 16 digits starts with 5338 or 4738
         // the phone number should be 11 digits starts with 010, 011, 012, or 015
         // the balance should be between 0 and maxAllowedBalance

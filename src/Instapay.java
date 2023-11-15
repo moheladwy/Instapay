@@ -1,19 +1,26 @@
-import DummyAPIs.BankAccountDataAPI;
-import DummyAPIs.InstapayAccountDataAPI;
-import DummyAPIs.WalletDataAPI;
-import enums.AuthenticationStatus;
+import DummyAPIs.*;
+import enums.*;
 import logic.*;
 import models.*;
+import java.util.Scanner;
 
 public class Instapay {
     private Authentication authentication;
     private Account account;
     private User user;
+    private InstapayAccountDataAPI InstapayAPI;
+    private BankAccountDataAPI BankAPI;
+    private BillsDataAPI BillsAPI;
+    private WalletDataAPI WalletAPI;
 
-    public Instapay() {
+    public Instapay() throws Exception {
         this.authentication = null;
         this.account = null;
         user = new User();
+        InstapayAPI = new InstapayAccountDataAPI();
+        BankAPI = new BankAccountDataAPI();
+        BillsAPI = new BillsDataAPI();
+        WalletAPI = new WalletDataAPI();
     }
 
     public static void main(String[] args) {
@@ -26,11 +33,12 @@ public class Instapay {
     }
 
     public void start() throws Exception {
-        int accountType = UI.chooseAccountType();
-        setAttributes(accountType);
+        int type = UI.chooseAccountType();
+        setAttributes(type);
 
         int authenticationType = UI.chooseAuthenticationType();
         executeAuthenticationMethod(authenticationType);
+
 
         while (true) {
             int operation = UI.chooseOperation();
@@ -38,12 +46,17 @@ public class Instapay {
                 case 1: {
                     int option = UI.chooseTransactionType();
                     executeMoneyTransaction(option);
+                    break;
                 }
                 case 2: {
                     int option = UI.chooseBillType();
                     executePayingBills(option);
+                    break;
                 }
-                case 3: checkBalance();
+                case 3: {
+                    checkBalance();
+                    break;
+                }
                 case 4: {
                     System.out.println("Thanks for using Instapay!");
                     System.exit(0);
@@ -54,23 +67,29 @@ public class Instapay {
 
     private void executeMoneyTransaction(int option) {
         switch (option) {
-            case 1: executeInstapayTransaction();
-            case 2: executeBankAccountTransaction();
-            case 3: executeWalletTransaction();
-            case 4: break;
+            case 1 -> executeInstapayTransaction();
+            case 2 -> {
+                if (user.getAccount().getAccountType() == AccountType.Bank)
+                    executeBankAccountTransaction();
+                else System.out.println("You can't send money to bank account from your wallet!");
+            }
+            case 3 -> executeWalletTransaction();
+            case 4 -> System.out.println("Returning to the main menu...");
+            default -> System.out.println("Invalid option!");
         }
     }
 
     private void executeInstapayTransaction() {
         String receiverUsername = UI.getReceiverUsername();
-        if (!InstapayAccountDataAPI.isUsernameExists(receiverUsername))  {
+        if (!InstapayAPI.isUsernameExists(receiverUsername))  {
             System.out.println("Username doesn't exist!");
             return;
         }
-        Account receiver = InstapayAccountDataAPI.getAccount(receiverUsername);
+        Account receiver = InstapayAPI.getAccount(receiverUsername);
         double amount = UI.getAmount();
         try {
             Payment.sendToInstapayAccount(user.getAccount(), receiver, amount);
+            System.out.println("Transaction done successfully!");
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -78,14 +97,15 @@ public class Instapay {
 
     private void executeBankAccountTransaction() {
         String receiverBankAccountNumber = UI.getReceiverBankAccountNumber();
-        if (!BankAccountDataAPI.isBankAccountExist(receiverBankAccountNumber)) {
+        if (!BankAPI.isBankAccountExist(receiverBankAccountNumber)) {
             System.out.println("Bank account number doesn't exist!");
             return;
         }
-        BankAccount receiverBankAccount = BankAccountDataAPI.getAccount(receiverBankAccountNumber);
+        BankAccount receiverBankAccount = BankAPI.getAccount(receiverBankAccountNumber);
         double amount = UI.getAmount();
         try {
             Payment.sendToBankAccount((BankAccount) user.getAccount(), receiverBankAccount, amount);
+            System.out.println("Transaction done successfully!");
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -93,14 +113,15 @@ public class Instapay {
 
     private void executeWalletTransaction() {
         String receiverPhoneNumber = UI.getReceiverPhoneNumber();
-        if (!WalletDataAPI.isPhoneNumberHasWallet(receiverPhoneNumber)) {
+        if (!WalletAPI.isPhoneNumberHasWallet(receiverPhoneNumber)) {
             System.out.println("Phone number doesn't exist!");
             return;
         }
-        WalletAccount receiverAccount = WalletDataAPI.getWallet(receiverPhoneNumber);
+        WalletAccount receiverAccount = WalletAPI.getWallet(receiverPhoneNumber);
         double amount = UI.getAmount();
         try {
             Payment.sendToWallet(user.getAccount(), receiverAccount, amount);
+            System.out.println("Transaction done successfully!");
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -108,23 +129,71 @@ public class Instapay {
 
     private void executePayingBills(int option) {
         switch (option) {
-            case 1: executeElectricityBillPayment();
-            case 2: executeWaterBillPayment();
-            case 3: executeGasBillPayment();
-            case 4: break;
+            case 1 -> executeWaterBillPayment();
+            case 2 -> executeElectricityBillPayment();
+            case 3 -> executeGasBillPayment();
+            case 4 -> System.out.println("Returning to the main menu...");
+            default -> System.out.println("Invalid option!");
         }
     }
 
     private void executeGasBillPayment() {
-        // TODO: Write the implementation.
+        System.out.print("Enter payment number: ");
+        Scanner scanner = new Scanner(System.in);
+        String paymentNumber = scanner.nextLine();
+
+        GasBill bill = BillsAPI.getGasBill(paymentNumber);
+        if (bill == null) {
+            System.out.println("Payment number doesn't exist!");
+            return;
+        }
+        double amount = bill.getAmount();
+
+        try {
+            Payment.payBill(user.getAccount(), bill, amount);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+
+
+
     }
 
     private void executeWaterBillPayment() {
-        // TODO: Write the implementation.
+        System.out.print("Enter payment number: ");
+        Scanner scanner = new Scanner(System.in);
+        String paymentNumber = scanner.nextLine();
+
+        WaterBill bill = BillsAPI.getWaterBill(paymentNumber);
+        if (bill == null) {
+            System.out.println("Payment number doesn't exist!");
+            return;
+        }
+        double amount = bill.getAmount();
+        try {
+            Payment.payBill(user.getAccount(), bill, amount);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     private void executeElectricityBillPayment() {
-        // TODO: Write the implementation.
+        System.out.print("Enter payment number: ");
+        Scanner scanner = new Scanner(System.in);
+        String paymentNumber = scanner.nextLine();
+
+        ElectricityBill bill = BillsAPI.getElectricityBill(paymentNumber);
+        if (bill == null) {
+            System.out.println("Payment number doesn't exist!");
+            return;
+        }
+        double amount = bill.getAmount();
+
+        try {
+            Payment.payBill(user.getAccount(), bill, amount);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     private void checkBalance() {
@@ -132,26 +201,22 @@ public class Instapay {
     }
 
     private void executeAuthenticationMethod(int operation) {
-        AuthenticationStatus status = null;
+        RegistrationStatus status = null;
         switch (operation) {
             case 1 -> {
-                status = authentication.login();
-                if (status == AuthenticationStatus.LOGIN_FAILED) {
+                user = authentication.login();
+                if (user == null) {
                     System.out.println("Invalid username or password, Try again later!");
-                    System.exit(0);
-                }
-                else if (status == AuthenticationStatus.NOT_HAVE_ACCOUNT) {
-                    System.out.println("You don't have an account, Please register first!");
                     System.exit(0);
                 }
             }
             case 2 -> {
-                status = authentication.register();
-                if (status == AuthenticationStatus.REGISTRATION_FAILED) {
+                status = authentication.register(user);
+                if (status == RegistrationStatus.REGISTRATION_FAILED) {
                     System.out.println("Registration failed, Try again later!");
                     System.exit(0);
                 }
-                else if (status == AuthenticationStatus.ALREADY_HAVE_ACCOUNT) {
+                else if (status == RegistrationStatus.ALREADY_HAVE_ACCOUNT) {
                     System.out.println("You already have an account, Please login!");
                     System.exit(0);
                 }
