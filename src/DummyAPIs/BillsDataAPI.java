@@ -20,25 +20,25 @@ public class BillsDataAPI {
         makeDummyData();
     }
 
-    public static WaterBill getWaterBill(String paymentCode) throws NullPointerException {
+    public WaterBill getWaterBill(String paymentCode) throws NullPointerException {
         if (paymentCode == null)
             throw new NullPointerException("Payment code cannot be null!");
         return waterBillsData.get(paymentCode);
     }
 
-    public static GasBill getGasBill(String paymentCode) throws NullPointerException {
+    public GasBill getGasBill(String paymentCode) throws NullPointerException {
         if (paymentCode == null)
             throw new NullPointerException("Payment code cannot be null!");
         return gasBillsData.get(paymentCode);
     }
 
-    public static ElectricityBill getElectricityBill(String paymentCode) throws NullPointerException {
+    public ElectricityBill getElectricityBill(String paymentCode) throws NullPointerException {
         if (paymentCode == null)
             throw new NullPointerException("Payment code cannot be null!");
         return electricityBillsData.get(paymentCode);
     }
 
-    private void makeDummyData() throws Exception {
+    private static void makeDummyData() throws Exception {
         //water bill consists of 9 digits: first 3 digits is the area code and last 6 is subscriber number
         waterBillsData.put("190", new WaterBill(190, "487121898","Mohamed"));
         waterBillsData.put("200", new WaterBill(200, "487121565", "Ahmed"));

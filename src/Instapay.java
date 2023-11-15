@@ -6,6 +6,7 @@ import enums.AuthenticationStatus;
 import logic.*;
 import models.*;
 
+
 import java.util.Scanner;
 
 public class Instapay {
@@ -13,10 +14,22 @@ public class Instapay {
     private Account account;
     private User user;
 
-    public Instapay() {
+    private InstapayAccountDataAPI InstapayAPI;
+
+    private BankAccountDataAPI BankAPI;
+
+    private BillsDataAPI BillsAPI;
+
+    private WalletDataAPI WalletAPI;
+
+    public Instapay() throws Exception {
         this.authentication = null;
         this.account = null;
         user = new User();
+        InstapayAPI = new InstapayAccountDataAPI();
+        BankAPI = new BankAccountDataAPI();
+        BillsAPI = new BillsDataAPI();
+        WalletAPI = new WalletDataAPI();
     }
 
     public static void main(String[] args) {
@@ -66,11 +79,11 @@ public class Instapay {
 
     private void executeInstapayTransaction() {
         String receiverUsername = UI.getReceiverUsername();
-        if (!InstapayAccountDataAPI.isUsernameExists(receiverUsername))  {
+        if (!InstapayAPI.isUsernameExists(receiverUsername))  {
             System.out.println("Username doesn't exist!");
             return;
         }
-        Account receiver = InstapayAccountDataAPI.getAccount(receiverUsername);
+        Account receiver = InstapayAPI.getAccount(receiverUsername);
         double amount = UI.getAmount();
         try {
             Payment.sendToInstapayAccount(user.getAccount(), receiver, amount);
@@ -81,11 +94,11 @@ public class Instapay {
 
     private void executeBankAccountTransaction() {
         String receiverBankAccountNumber = UI.getReceiverBankAccountNumber();
-        if (!BankAccountDataAPI.isBankAccountExist(receiverBankAccountNumber)) {
+        if (!BankAPI.isBankAccountExist(receiverBankAccountNumber)) {
             System.out.println("Bank account number doesn't exist!");
             return;
         }
-        BankAccount receiverBankAccount = BankAccountDataAPI.getAccount(receiverBankAccountNumber);
+        BankAccount receiverBankAccount = BankAPI.getAccount(receiverBankAccountNumber);
         double amount = UI.getAmount();
         try {
             Payment.sendToBankAccount((BankAccount) user.getAccount(), receiverBankAccount, amount);
@@ -96,11 +109,11 @@ public class Instapay {
 
     private void executeWalletTransaction() {
         String receiverPhoneNumber = UI.getReceiverPhoneNumber();
-        if (!WalletDataAPI.isPhoneNumberHasWallet(receiverPhoneNumber)) {
+        if (!WalletAPI.isPhoneNumberHasWallet(receiverPhoneNumber)) {
             System.out.println("Phone number doesn't exist!");
             return;
         }
-        WalletAccount receiverAccount = WalletDataAPI.getWallet(receiverPhoneNumber);
+        WalletAccount receiverAccount = WalletAPI.getWallet(receiverPhoneNumber);
         double amount = UI.getAmount();
         try {
             Payment.sendToWallet(user.getAccount(), receiverAccount, amount);
@@ -123,7 +136,7 @@ public class Instapay {
         Scanner scanner = new Scanner(System.in);
         String paymentNumber = scanner.nextLine();
 
-        GasBill bill = BillsDataAPI.getGasBill(paymentNumber);
+        GasBill bill = BillsAPI.getGasBill(paymentNumber);
         if (bill == null) {
             System.out.println("Payment number doesn't exist!");
             return;
@@ -145,7 +158,7 @@ public class Instapay {
         Scanner scanner = new Scanner(System.in);
         String paymentNumber = scanner.nextLine();
 
-        WaterBill bill = BillsDataAPI.getWaterBill(paymentNumber);
+        WaterBill bill = BillsAPI.getWaterBill(paymentNumber);
         if (bill == null) {
             System.out.println("Payment number doesn't exist!");
             return;
@@ -164,7 +177,7 @@ public class Instapay {
         Scanner scanner = new Scanner(System.in);
         String paymentNumber = scanner.nextLine();
 
-        ElectricityBill bill = BillsDataAPI.getElectricityBill(paymentNumber);
+        ElectricityBill bill = BillsAPI.getElectricityBill(paymentNumber);
         if (bill == null) {
             System.out.println("Payment number doesn't exist!");
             return;

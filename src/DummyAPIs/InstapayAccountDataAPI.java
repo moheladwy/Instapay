@@ -9,7 +9,7 @@ public class InstapayAccountDataAPI {
     // key: username
     private static HashMap<String, User> accounts;
 
-    private InstapayAccountDataAPI() {
+    public InstapayAccountDataAPI() {
         accounts = new HashMap<>();
         try {
             makeDummyData();
@@ -18,19 +18,19 @@ public class InstapayAccountDataAPI {
         }
     }
 
-    public static void addAccount(User user) throws NullPointerException {
+    public  void addAccount(User user) throws NullPointerException {
         if (user == null)
             throw new NullPointerException("User cannot be null!");
         accounts.put(user.getUsername(), user);
     }
 
-    public static boolean isUsernameExists(String username)  {
+    public  boolean isUsernameExists(String username)  {
         if (username == null)
             return false;
         return accounts.containsKey(username);
     }
 
-    public static User getUser(String username, String password) {
+    public  User getUser(String username, String password) {
         if (username == null || password == null)
             return null;
         User user = accounts.get(username);
@@ -39,7 +39,7 @@ public class InstapayAccountDataAPI {
         return user;
     }
 
-    public static Account getAccount(String username) {
+    public  Account getAccount(String username) {
         if (username == null)
             return null;
         User user = accounts.get(username);

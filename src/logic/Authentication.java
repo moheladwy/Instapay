@@ -7,6 +7,7 @@ import models.*;
 import java.util.Scanner;
 
 public abstract class Authentication {
+
     public AuthenticationStatus register(){
         // Step 1: Register personal info
         User user = registerPersonalInfo();
@@ -20,7 +21,7 @@ public abstract class Authentication {
 
         // Step 3: Add account to Database
         user.setAccount(account);
-        InstapayAccountDataAPI.addAccount(user);
+        new InstapayAccountDataAPI().addAccount(user);
         return AuthenticationStatus.REGISTRATION_SUCCESS;
     }
 
@@ -33,7 +34,7 @@ public abstract class Authentication {
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
 
-        User user = InstapayAccountDataAPI.getUser(username, password);
+        User user = new InstapayAccountDataAPI().getUser(username, password);
 
         if (user == null) {
             System.out.println("Invalid username or password!");
@@ -59,7 +60,7 @@ public abstract class Authentication {
     protected User registerPersonalInfo(){
         System.out.println("Enter your personal information=>");
         User user = takeUserInfoInput();
-        if (InstapayAccountDataAPI.isUsernameExists(user.getUsername())) {
+        if (new InstapayAccountDataAPI().isUsernameExists(user.getUsername())) {
             System.out.println("Username already exists!");
             return null;
         }
