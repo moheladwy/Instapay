@@ -1,23 +1,31 @@
-package logic;
-
 import java.util.Scanner;
 
 public class UI {
-    private static void accountTypeMenu() {
-        System.out.println("=====================================================");
-        System.out.println("Welcome to Instapay!");
-        System.out.println("Please choose account type from the following types=>");
-        System.out.println("=====================================================");
-        System.out.println("1- Bank Account");
-        System.out.println("2- Wallet Account");
+    public static void main(String[] args) {
+        try {
+            Instapay instapay = new Instapay();
+            instapay.start();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     private static void authenticationMenu() {
         System.out.println("=======================================================");
+        System.out.println("Welcome to Instapay!");
         System.out.println("Please choose operation from the following operations=>");
         System.out.println("=======================================================");
         System.out.println("1- Login");
         System.out.println("2- Register");
+        System.out.println("3- Exit");
+    }
+
+    private static void accountTypeMenu() {
+        System.out.println("=====================================================");
+        System.out.println("Please choose account type from the following types=>");
+        System.out.println("=====================================================");
+        System.out.println("1- Bank Account");
+        System.out.println("2- Wallet Account");
         System.out.println("3- Exit");
     }
 
@@ -49,15 +57,6 @@ public class UI {
         System.out.println("4- Return to the Main Menu");
     }
 
-    private static void editPersonalInfoMenu() {
-        System.out.println("choose operation from the following operations=>");
-        System.out.println("================================================");
-        System.out.println("1- Edit Full Name");
-        System.out.println("2- Edit Password");
-        System.out.println("3- Edit Account Type");
-        System.out.println("4- Return to the Main Menu");
-    }
-
     public static int chooseOperation() {
         UI.optionsMenu();
         int operation = 0;
@@ -86,6 +85,7 @@ public class UI {
             switch (accountType) {
                 case "1" -> type = 1;
                 case "2" -> type = 2;
+                case "3" -> type = 3;
                 default -> System.out.println("Invalid choice, Please Enter 1 or 2 only!");
             }
         }

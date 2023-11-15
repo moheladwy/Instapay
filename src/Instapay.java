@@ -8,10 +8,10 @@ public class Instapay {
     private Authentication authentication;
     private Account account;
     private User user;
-    private InstapayAccountDataAPI InstapayAPI;
-    private BankAccountDataAPI BankAPI;
-    private BillsDataAPI BillsAPI;
-    private WalletDataAPI WalletAPI;
+    private final InstapayAccountDataAPI InstapayAPI;
+    private final BankAccountDataAPI BankAPI;
+    private final BillsDataAPI BillsAPI;
+    private final WalletDataAPI WalletAPI;
 
     public Instapay() throws Exception {
         this.authentication = null;
@@ -23,45 +23,42 @@ public class Instapay {
         WalletAPI = new WalletDataAPI();
     }
 
-    public static void main(String[] args) {
-        try {
-            Instapay instapay = new Instapay();
-            instapay.start();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-    }
-
-    public void start() throws Exception {
-        int type = UI.chooseAccountType();
-        setAttributes(type);
-
+    public void start() {
         int authenticationType = UI.chooseAuthenticationType();
+        if (authenticationType == 1) {
+            authentication = new BankAccountAuthentication();
+            account = user.getAccount();
+        } else if (authenticationType == 2) {
+            int accountType = UI.chooseAccountType();
+            if (accountType == 3) exit("Thank you for using Instapay!");
+            setAttributes(accountType);
+        } else exit("Thank you for using Instapay!");
         executeAuthenticationMethod(authenticationType);
-
 
         while (true) {
             int operation = UI.chooseOperation();
             switch (operation) {
-                case 1: {
+                case 1 -> {
                     int option = UI.chooseTransactionType();
                     executeMoneyTransaction(option);
-                    break;
                 }
-                case 2: {
+                case 2 -> {
                     int option = UI.chooseBillType();
                     executePayingBills(option);
-                    break;
                 }
-                case 3: {
-                    checkBalance();
-                    break;
-                }
-                case 4: {
-                    System.out.println("Thanks for using Instapay!");
-                    System.exit(0);
-                }
+                case 3 -> checkBalance();
+                case 4 -> exit("Thank you for using Instapay!");
             }
+        }
+    }
+
+    private void setAttributes(int type) {
+        account = (type == 1) ? new BankAccount() : new WalletAccount();
+        authentication = (type == 1) ? new BankAccountAuthentication() : new WalletAccountAuthentication();
+        try {
+            user.setAccount(account);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
         }
     }
 
@@ -201,41 +198,21 @@ public class Instapay {
     }
 
     private void executeAuthenticationMethod(int operation) {
-        RegistrationStatus status = null;
-        switch (operation) {
-            case 1 -> {
-                user = authentication.login();
-                if (user == null) {
-                    System.out.println("Invalid username or password, Try again later!");
-                    System.exit(0);
-                }
-            }
-            case 2 -> {
-                status = authentication.register(user);
-                if (status == RegistrationStatus.REGISTRATION_FAILED) {
-                    System.out.println("Registration failed, Try again later!");
-                    System.exit(0);
-                }
-                else if (status == RegistrationStatus.ALREADY_HAVE_ACCOUNT) {
-                    System.out.println("You already have an account, Please login!");
-                    System.exit(0);
-                }
-            }
-            case 3 -> {
-                System.out.println("Thanks for using Instapay!");
-                System.exit(0);
-            }
+        if (operation == 1) {
+            user = authentication.login();
+            if (user == null)
+                exit("Invalid username or password, Try again later!");
+        } else {
+            RegistrationStatus status = authentication.register(user);
+            if (status == RegistrationStatus.REGISTRATION_FAILED)
+                exit("Registration failed, Try again later!");
+            else if (status == RegistrationStatus.ALREADY_HAVE_ACCOUNT)
+                exit("You already have an account, Please login!");
         }
     }
 
-    private void setAttributes(int type) {
-        account = (type == 1) ? new BankAccount() : new WalletAccount();
-        authentication = (type == 1) ? new BankAccountAuthentication() : new WalletAccountAuthentication();
-        user = new User();
-        try {
-            user.setAccount(account);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
+    public void exit(String message) {
+        System.out.println(message);
+        System.exit(0);
     }
 }

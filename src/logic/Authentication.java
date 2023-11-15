@@ -51,13 +51,12 @@ public abstract class Authentication {
         return true;
     }
 
-    protected RegistrationStatus registerPersonalInfo(User user){
+    protected RegistrationStatus registerPersonalInfo(User user) {
         System.out.println("Enter your personal information=>");
         user.copy(takeUserInfoInput());
 
-        if (new InstapayAccountDataAPI().isUsernameExists(user.getUsername())) {
+        if (new InstapayAccountDataAPI().isUsernameExists(user.getUsername()))
             return RegistrationStatus.ALREADY_HAVE_ACCOUNT;
-        }
 
         user = sendOTP(user) ? user : null;
         return user != null ? RegistrationStatus.REGISTRATION_SUCCESS : RegistrationStatus.REGISTRATION_FAILED;
